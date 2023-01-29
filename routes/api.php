@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Metro;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,16 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/metros', function(Request $request){
+    if($request->filter && $request->value){
+        try{
+            return Metro::where($request->filter, $request->value)->paginate(50);
+        }catch(QueryException $e){
+            throw new \Exception('Inválidos campos de búsqueda');
+        }
+    }
+    return Metro::paginate(50);
+});
+
+Route::post('/metros/{id}', fn(Request $request) => Metro::findOrFail($request->id));
