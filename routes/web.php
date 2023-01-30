@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Comuna;
 use App\Models\Metro;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return inertia('index', ['metros' => Metro::with('comuna')->paginate(50)]);
+Route::get('/', function (Request $request) {
+    $metros = Metro::with('comuna')->paginate(50);
+    $lineas = Metro::select('codigo')->pluck('codigo')->unique();
+    $comunas = Comuna::orderBy('nombre')->get();
+    return inertia('index', compact('metros','lineas','comunas'));
 });
