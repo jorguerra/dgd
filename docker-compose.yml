@@ -16,6 +16,11 @@ services:
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            DB_CONNECTION: pgsql
+            DB_HOST: pgsql
+            DB_DATABASE: prueba
+            DB_USERNAME: dgd
+            DB_PASSWORD: dgd
         volumes:
             - '.:/var/www/html'
         networks:
@@ -34,9 +39,27 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
+    pgsql:
+        image: 'postgres:15'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            POSTGRES_DB: prueba
+            POSTGRES_USER: dgd
+            POSTGRES_PASSWORD: dgd
+        volumes:
+            - 'sail-pgsql:/var/lib/postgresql/data'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            retries: 3
+            timeout: 5s
 networks:
     sail:
         driver: bridge
 volumes:
     sail-redis:
+        driver: local
+    sail-pgsql:
         driver: local
