@@ -19,18 +19,20 @@ class DatabaseSeeder extends Seeder
         $xml = simplexml_load_file(storage_path('seeder.xml'));
         foreach($xml->children() as $row){
             $comuna = Comuna::firstOrCreate(['nombre' => (string) $row->COMUNA]);
-            Metro::create([
-                'codigo' => (string) $row->CODIGO,
-                'entidad' => (string) $row->ENTIDAD,
-                'nombre' => (string) $row->NOMBRE,
-                'direccion' => (string) $row->DIRECCION,
-                'id_comuna' => $comuna->id,
-                'horario' => (string) $row->HORARIO,
-                'este' => (string) $row->ESTE,
-                'norte' => (string) $row->NORTE,
-                'longitud' => (string) $row->LONGITUD,
-                'latitud' => (string) $row->LATITUD,
-            ]);
+            Metro::updateOrCreate(
+                ['entidad' => (string) $row->ENTIDAD],
+                [
+                    'codigo' => (string) $row->CODIGO,
+                    'nombre' => (string) $row->NOMBRE,
+                    'direccion' => (string) $row->DIRECCION,
+                    'id_comuna' => $comuna->id,
+                    'horario' => (string) $row->HORARIO,
+                    'este' => (string) $row->ESTE,
+                    'norte' => (string) $row->NORTE,
+                    'longitud' => (string) $row->LONGITUD,
+                    'latitud' => (string) $row->LATITUD,
+                ]
+            );
         }
     }
 }
