@@ -28,6 +28,6 @@ class Metro extends Model
 
     public function comuna(): BelongsTo
     {
-        return $this->belongsTo(Comuna::class);
+        return $this->belongsTo(Comuna::class,'id_comuna');
     }
 }
