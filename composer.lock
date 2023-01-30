@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb44bae29edfeaf7804b69cebebd23f4",
+    "content-hash": "1750b7cbf85aa01de5559c7f196baf6f",
     "packages": [
         {
             "name": "brick/math",
@@ -5902,6 +5902,63 @@
                 }
             ],
             "time": "2022-03-03T13:19:32+00:00"
+        },
+        {
+            "name": "neo/little-sail",
+            "version": "v1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/neoighodaro/little-sail.git",
+                "reference": "31586f08baaeef80f8593e77a5a71557eaa8c32e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/neoighodaro/little-sail/zipball/31586f08baaeef80f8593e77a5a71557eaa8c32e",
+                "reference": "31586f08baaeef80f8593e77a5a71557eaa8c32e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/sail": "^1.4",
+                "php": "^7.3|^8.0"
+            },
+            "bin": [
+                "bin/dock"
+            ],
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Neo\\LittleSail\\LittleSailServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Neo\\LittleSail\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Neo Ighodaro",
+                    "email": "neo@creativitykills.co"
+                }
+            ],
+            "description": "Smaller Alpine based image for Laravel Sail runtimes",
+            "keywords": [
+                "Neo",
+                "docker",
+                "laravel",
+                "little-sail"
+            ],
+            "support": {
+                "issues": "https://github.com/neoighodaro/little-sail/issues",
+                "source": "https://github.com/neoighodaro/little-sail"
+            },
+            "time": "2022-02-17T12:10:44+00:00"
         },
         {
             "name": "nunomaduro/collision",
