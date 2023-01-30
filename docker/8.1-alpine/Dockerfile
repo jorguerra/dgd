@@ -5,15 +5,17 @@ LABEL maintainer="Neo Ighodaro"
 WORKDIR /var/www/html
 
 ARG WWWUSER
+ARG DOCKERPATH
 
 ENV TZ=UTC
 ENV ENV="/root/.ashrc"
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY .ashrc /root/.ashrc
-COPY php.ini /usr/local/etc/php/conf.d/99-sail.ini
-COPY start-container /usr/local/bin/start-container
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY . .
+COPY ${DOCKERPATH}.ashrc /root/.ashrc
+COPY ${DOCKERPATH}php.ini /usr/local/etc/php/conf.d/99-sail.ini
+COPY ${DOCKERPATH}start-container /usr/local/bin/start-container
+COPY ${DOCKERPATH}supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -22,7 +24,8 @@ RUN set -eux; \
     # Install persistent / runtime deps
     && apk --update add --no-cache tzdata gnupg su-exec zip unzip git supervisor sqlite libcap nodejs npm \
     # Install PHP extensions
-    && install-php-extensions pcntl ldap redis intl soap imap pdo_mysql pcov msgpack bcmath igbinary gd zip opcache @composer
+    && install-php-extensions pcntl ldap redis intl soap imap pdo_pgsql pcov msgpack bcmath igbinary gd zip opcache @composer \
+    && composer install && npm install && mkdir -p public/build && chmod 777 public/build  && npm run build
 
 # Clean up
 RUN rm -rf /usr/share/php /usr/share/php8 /usr/src/* /usr/local/bin/phpdbg \

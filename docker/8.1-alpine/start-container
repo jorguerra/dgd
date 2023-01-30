@@ -14,10 +14,8 @@ else
     fi
 
     chmod -R ugo+rw /.composer
-    composer install
     php artisan migrate --force
     php artisan db:seed --force
-    npm run dev
 
     if [ $# -gt 0 ];then
         exec su-exec $WWWUSER "$@"
