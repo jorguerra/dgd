@@ -1,6 +1,22 @@
 <script>
-
-export default {}
+import Show from './Show.vue';
+import { watch, ref } from 'vue'
+export default {
+    components: {Show},
+    setup(){
+        const isOpen = ref(false)
+        return isOpen
+    },
+    data (){
+        return {active: {nombre: null, horario: null}}
+    },
+    methods: {
+        setActive (metro){
+            this.active = metro
+            this.isOpen = true
+        }
+    }
+}
 </script>
 <template>
     <div class="w-90 ml-6 mr-6 text-black p-8 bg-white mt-12 rounded-3xl">
@@ -26,7 +42,7 @@ export default {}
             </thead>
             <tbody class="border border-collapse border-b-gray-500">
                 <tr v-for="metro in metros.data" :key="metro.id" class="odd:bg-gray-100 even:bg-white-100 border-b">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ metro.nombre }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-900 hover:text-underline cursor-pointer hover:underline" @click="setActive(metro)">{{ metro.nombre }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ metro.direccion }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ metro.comuna.nombre }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ metro.codigo }}</td>
@@ -42,20 +58,27 @@ export default {}
         </table>
     </div>
 
+    <Show :open="typeof isOpen == 'undefined' ? false : isOpen" @close="isOpen = !isOpen" :nombre="active.nombre" :horario="active.horario" />
+
 </template>
 
 <script setup>
 import _ from 'lodash';
 import { usePage } from '@inertiajs/vue3'
-import { watch, ref } from 'vue'
 import axios from 'axios'
 
 defineProps({metros: Object, comunas: Object, lineas: Object})
 const linkPage = (x) => `/?page=${x}`
-let comuna = ref('')
-let codigo = ref('')
-watch(comuna, value => updateMetro('id_comuna', value))
-watch(codigo, value => updateMetro('codigo', value))
+let comuna = ref('comuna')
+let codigo = ref('codigo')
+watch(comuna, value => {
+    codigo = ref('')
+    updateMetro('id_comuna', value)
+})
+watch(codigo, value => {
+    comuna = ref('')
+    updateMetro('codigo', value)
+})
 
 const updateMetro = function(filter, val){
     axios.post(`/api/metros`,{filter: filter, value: val}).then(function(response){
