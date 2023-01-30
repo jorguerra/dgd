@@ -14,6 +14,7 @@ else
     fi
 
     chmod -R ugo+rw /.composer
+    composer install
     php artisan migrate
     php artisan db:seed
     npm run dev
