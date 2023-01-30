@@ -14,7 +14,7 @@ else
     fi
 
     chmod -R ugo+rw /.composer
-    npm run build
+    npm run dev
 
     if [ $# -gt 0 ];then
         exec su-exec $WWWUSER "$@"
